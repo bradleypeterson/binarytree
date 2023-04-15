@@ -16,6 +16,22 @@ using std::cin;
 using std::endl;
 using std::pow;
 
+
+TreeParser::TreeParser() {
+  this->initialize();
+}
+TreeParser::~TreeParser() {
+  this->deleteTree(this->root);
+}
+
+void TreeParser::deleteTree(Node* p) {
+  if (p) {
+    deleteTree(p->left);
+    deleteTree(p->right);
+    delete p;
+  }
+}
+
 // Public computeAnswer
 double TreeParser::computeAnswer()
 {
@@ -198,11 +214,6 @@ string TreeParser::castDoubleToStr(const double d)  const {
   return std::to_string(d);
   
 }
-
-TreeParser::TreeParser() {
-  this->initialize();
-}
-
 
 void TreeParser::displayParseTree() const {
   cout << "The expression seen using in-order traversal: ";

@@ -23,6 +23,7 @@ class TreeParser
 {
 public:
   TreeParser();
+  ~TreeParser();
   void displayParseTree() const;
   void inOrderTraversal() const;
   void postOrderTraversal() const;
@@ -30,10 +31,7 @@ public:
   double computeAnswer();
 
 private:
-  string expression;
-  unsigned int position;
-
-  stack<double> mathStack;
+  void deleteTree(Node* p);
   double castStrToDouble(string const& s) const;
   string castDoubleToStr(const double d) const;
   void initialize();
@@ -44,6 +42,8 @@ private:
   void processExpression(Node* p);
   void computeAnswer(Node* ptr);
   Node* root{ nullptr };
-
+  string expression;
+  unsigned int position;
+  stack<double> mathStack;
 };
 
