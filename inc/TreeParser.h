@@ -24,6 +24,7 @@ class TreeParser
 public:
   TreeParser();
   ~TreeParser();
+  void clear();
   void displayParseTree() const;
   void inOrderTraversal() const;
   void postOrderTraversal() const;
@@ -31,7 +32,7 @@ public:
   double computeAnswer();
 
 private:
-  void deleteTree(Node* p);
+  void clear(Node* p);
   double castStrToDouble(string const& s) const;
   string castDoubleToStr(const double d) const;
   void initialize();

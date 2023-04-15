@@ -21,16 +21,85 @@ TreeParser::TreeParser() {
   this->initialize();
 }
 TreeParser::~TreeParser() {
-  this->deleteTree(this->root);
+  this->clear();
+
 }
 
-void TreeParser::deleteTree(Node* p) {
+void TreeParser::clear() {
+  this->clear(this->root);
+}
+
+void TreeParser::clear(Node* p) {
   if (p) {
-    deleteTree(p->left);
-    deleteTree(p->right);
+    clear(p->left);
+    clear(p->right);
     delete p;
   }
 }
+
+void TreeParser::processExpression(string& expression)
+{
+  if (expression != "")
+  {
+    this->clear();
+    this->expression = expression;
+    position = 0;
+
+    this->root = new Node;
+
+    processExpression(root);
+  }
+}
+
+
+void TreeParser::processExpression(Node* p)
+{
+  while (position < expression.length())
+  {
+    if (expression.at(position) == '(')
+    {
+      p->left = new Node;
+      // p->left->data = expression.at(position); Don't put data in yet, right?
+      position++;
+      processExpression(p->left);
+    }
+
+    else if (isDigit(expression.at(position)) || expression.at(position) == '.')
+    {
+      string tempString = expression.substr(position, 1);
+      position++;
+
+      while (isDigit(expression.at(position)) || expression.at(position) == '.')
+      {
+        tempString += expression.at(position);
+        position++;
+      }
+      p->data = tempString;
+      return;
+    }
+
+    else if (isOperator(expression.at(position)))
+    {
+      p->data = expression.at(position);
+      p->right = new Node;
+      position++;
+      processExpression(p->right);
+    }
+
+    else if (expression.at(position) == ')')
+    {
+      position++;
+      return;
+    }
+
+    else if (expression.at(position) == ' ')
+    {
+      position++;
+      // processExpression(p); "let it go around for the next iteration of the loop"
+    }
+  }
+}
+
 
 // Public computeAnswer
 double TreeParser::computeAnswer()
@@ -92,53 +161,6 @@ void TreeParser::computeAnswer(Node* ptr)
   }
 }
 
-void TreeParser::processExpression(Node* p)
-{
-  while (position < expression.length())
-  {
-    if (expression.at(position) == '(')
-    {
-      p->left = new Node;
-      // p->left->data = expression.at(position); Don't put data in yet, right?
-      position++;
-      processExpression(p->left);
-    }
-
-    else if (isDigit(expression.at(position)) || expression.at(position) == '.')
-    {
-      string tempString = expression.substr(position, 1);
-      position++;
-
-      while (isDigit(expression.at(position)) || expression.at(position) == '.')
-      {
-        tempString += expression.at(position);
-        position++;
-      }
-      p->data = tempString;
-      return;
-    }
-
-    else if (isOperator(expression.at(position)))
-    {
-      p->data = expression.at(position);
-      p->right = new Node;
-      position++;
-      processExpression(p->right);
-    }
-
-    else if (expression.at(position) == ')')
-    {
-      position++;
-      return;
-    }
-
-    else if (expression.at(position) == ' ')
-    {
-      position++;
-      // processExpression(p); "let it go around for the next iteration of the loop"
-    }
-  }
-}
 
 bool TreeParser::isDigit(char c) const
 {
@@ -150,18 +172,7 @@ bool TreeParser::isOperator(char c) const
   return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') ? (true) : (false);
 }
 
-void TreeParser::processExpression(string& expression)
-{
-  if (expression != "")
-  {
-    this->expression = expression;
-    position = 0;
 
-    this->root = new Node;
-
-    processExpression(root);
-  }
-}
 
 // Public inOrder
 void TreeParser::inOrderTraversal() const

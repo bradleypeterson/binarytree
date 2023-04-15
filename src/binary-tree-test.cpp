@@ -102,13 +102,12 @@ int test_TwoOrMoreOperators() {
   int testNum = 1;
   int correct = 0;
   TreeParser tp;
-
   string expression = "((2-5)-5)";
   tp.processExpression(expression);
   tp.displayParseTree();
   double answer = tp.computeAnswer();
   checkTest(testNum++, correct, -8, answer); // 1
-
+  
   cout << "The result is: " << tp.computeAnswer() << endl;
   expression = "(5 * (6/2))";
   tp.processExpression(expression);
