@@ -211,7 +211,7 @@ int main(int argc, char** argv) {
     cout << "----------------" << endl;
     cout << "Passed " << count << " out of 4 group tests" << endl;
     cout << "--End of tests--" << endl;
-    return count != 3;
+    return count != 4;
   case 1:
     return !test_SimpleExpressions();
   case 2:
