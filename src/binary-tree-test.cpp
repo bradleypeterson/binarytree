@@ -64,31 +64,31 @@ int test_SimpleExpressions(){
 
   int testNum  = 1;
   int correct = 0;
-  TreeParser* tp = new TreeParser;
+  TreeParser tp;
 
   string expression = "(4+7)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  double answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  double answer = tp.computeAnswer();
   checkTest(testNum++, correct, 11, answer); // 1
 
-  cout << "The result is: " << tp->computeAnswer() << endl;
+  cout << "The result is: " << tp.computeAnswer() << endl;
   expression = "(7-4)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 3, answer); // 2
 
   expression = "(9*5)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 45, answer); // 3
 
   expression = "(4^3)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 64, answer); // 4
 
   return (testNum - 1 >= correct && correct > 0);
@@ -101,25 +101,25 @@ int test_TwoOrMoreOperators() {
 
   int testNum = 1;
   int correct = 0;
-  TreeParser* tp = new TreeParser;
+  TreeParser tp;
 
   string expression = "((2-5)-5)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  double answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  double answer = tp.computeAnswer();
   checkTest(testNum++, correct, -8, answer); // 1
 
-  cout << "The result is: " << tp->computeAnswer() << endl;
+  cout << "The result is: " << tp.computeAnswer() << endl;
   expression = "(5 * (6/2))";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 15, answer); // 2
 
   expression = "((6 / 3) + (8 * 2))";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 18, answer); // 3
 
   return (testNum - 1 >= correct && correct > 0);
@@ -131,19 +131,19 @@ int test_MultiDigitNumbers() {
 
   int testNum = 1;
   int correct = 0;
-  TreeParser* tp = new TreeParser;
+  TreeParser tp;
 
   string expression = "(543+321)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  double answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  double answer = tp.computeAnswer();
   checkTest(testNum++, correct, 864, answer); // 1
 
-  cout << "The result is: " << tp->computeAnswer() << endl;
+  cout << "The result is: " << tp.computeAnswer() << endl;
   expression = "(7.5-3.25)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 4.25, answer); // 2
 
   return (testNum - 1 >= correct && correct > 0);
@@ -156,38 +156,38 @@ int test_BigExpressions() {
 
   int testNum = 1;
   int correct = 0;
-  TreeParser* tp = new TreeParser;
+  TreeParser tp;
 
   string expression = "(5 + (34 - (7 * (32 / (16 * 0.5)))))";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  double answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  double answer = tp.computeAnswer();
   checkTest(testNum++, correct, 11, answer); // 1
 
-  cout << "The result is: " << tp->computeAnswer() << endl;
+  cout << "The result is: " << tp.computeAnswer() << endl;
   expression = "((5*(3+2))+(7*(4+6)))";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 95, answer); // 2
 
   expression = "(((2+3)*4)+(7+(8/2)))";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 31, answer); // 3
 
   expression = "(((((3+12)-7)*120)/(2+3))^3)";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 7077888, answer); // 4
 
 
   expression = "(((((9 + (2 * (110 - (30 / 2)))) * 8) + 1000) / 2) + (((3 ^ 4) + 1) / 2))";
-  tp->processExpression(expression);
-  tp->displayParseTree();
-  answer = tp->computeAnswer();
+  tp.processExpression(expression);
+  tp.displayParseTree();
+  answer = tp.computeAnswer();
   checkTest(testNum++, correct, 1337, answer); // 5
   return (testNum - 1 >= correct && correct > 0);
 
