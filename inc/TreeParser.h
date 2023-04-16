@@ -22,20 +22,15 @@ struct Node
 class TreeParser
 {
 public:
-  TreeParser();
   ~TreeParser();
   void clear();
-  void displayParseTree() const;
   void inOrderTraversal() const;
   void postOrderTraversal() const;
+  void displayParseTree() const;
   void processExpression(string& expression);
   double computeAnswer();
-
 private:
   void clear(Node* p);
-  double castStrToDouble(string const& s) const;
-  string castDoubleToStr(const double d) const;
-  void initialize();
   void inOrderTraversal(Node* p) const;
   void postOrderTraversal(Node* p) const;
   bool isDigit(char c) const;
