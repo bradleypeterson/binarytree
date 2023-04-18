@@ -23,6 +23,7 @@ TreeParser::~TreeParser() {
 
 void TreeParser::clear() {
   this->clear(this->root);
+  this->root = nullptr;
 }
 
 void TreeParser::clear(Node* p) {
@@ -83,7 +84,6 @@ void TreeParser::processExpression(Node* p) {
     }
   }
 }
-
 
 // Public computeAnswer
 double TreeParser::computeAnswer() {

@@ -1,14 +1,33 @@
 #include <iostream>
 #include <string>
+#include <sstream>
+
 #include "TreeParser.h"
 
 using std::cout;
 using std::endl;
 using std::string;
 
+// trim from start (in place)
+static inline void ltrim(std::string& s) {
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch);}));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string& s) {
+  s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string& s) {
+  rtrim(s);
+  ltrim(s);
+}
+
 //This helps with testing, comment it in when ready, but do not modify the code.
 bool checkTest(int testNum, int& correct, string whatItShouldBe, string whatItIs) {
-
+  trim(whatItIs);
+  trim(whatItShouldBe);
   if (whatItShouldBe == whatItIs) {
     correct++;
     cout << "Passed " << testNum << endl;
@@ -156,38 +175,114 @@ int test_BigExpressions() {
   int testNum = 1;
   int correct = 0;
   TreeParser tp;
-
+  std::stringstream buffer;
+  
+  // Redirect std::cout to buffer
+  
   string expression = "(5 + (34 - (7 * (32 / (16 * 0.5)))))";
   tp.processExpression(expression);
-  tp.displayParseTree();
-  double answer = tp.computeAnswer();
-  checkTest(testNum++, correct, 11, answer); // 1
 
-  cout << "The result is: " << tp.computeAnswer() << endl;
+  std::streambuf* coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  std::string inOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "5 + 34 - 7 * 32 / 16 * 0.5 ", inOrderText); // 1
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  std::string postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "5 34 7 32 16 0.5 * / * - + ", postOrderText); // 2
+
+  double answer = tp.computeAnswer();
+  checkTest(testNum++, correct, 11, answer); // 3
+  std::cout.rdbuf(coutbuf);
+
+
   expression = "((5*(3+2))+(7*(4+6)))";
   tp.processExpression(expression);
-  tp.displayParseTree();
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  inOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "5 * 3 + 2 + 7 * 4 + 6 ", inOrderText); // 4
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "5 3 2 + * 7 4 6 + * + ", postOrderText); // 5
+
   answer = tp.computeAnswer();
-  checkTest(testNum++, correct, 95, answer); // 2
+  checkTest(testNum++, correct, 95, answer); // 6
+  
 
   expression = "(((2+3)*4)+(7+(8/2)))";
   tp.processExpression(expression);
-  tp.displayParseTree();
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  inOrderText = buffer.str();
+  buffer.str(std::string());;
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "2 + 3 * 4 + 7 + 8 / 2 ", inOrderText); // 7
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "2 3 + 4 * 7 8 2 / + + ", postOrderText); // 8
+
   answer = tp.computeAnswer();
-  checkTest(testNum++, correct, 31, answer); // 3
+  checkTest(testNum++, correct, 31, answer); // 9
+
 
   expression = "(((((3+12)-7)*120)/(2+3))^3)";
   tp.processExpression(expression);
-  tp.displayParseTree();
+  
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  inOrderText = buffer.str();
+  buffer.str(std::string());;
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "3 + 12 - 7 * 120 / 2 + 3 ^ 3 ", inOrderText); // 10
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "3 12 + 7 - 120 * 2 3 + / 3 ^ ", postOrderText); // 11
+  
   answer = tp.computeAnswer();
-  checkTest(testNum++, correct, 7077888, answer); // 4
+  checkTest(testNum++, correct, 7077888, answer); // 12
 
 
   expression = "(((((9 + (2 * (110 - (30 / 2)))) * 8) + 1000) / 2) + (((3 ^ 4) + 1) / 2))";
   tp.processExpression(expression);
-  tp.displayParseTree();
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  inOrderText = buffer.str();
+  buffer.str(std::string());;
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "9 + 2 * 110 - 30 / 2 * 8 + 1000 / 2 + 3 ^ 4 + 1 / 2 ", inOrderText); // 13
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "9 2 110 30 2 / - * + 8 * 1000 + 2 / 3 4 ^ 1 + 2 / + ", postOrderText); // 14
+
   answer = tp.computeAnswer();
-  checkTest(testNum++, correct, 1337, answer); // 5
+  checkTest(testNum++, correct, 1337, answer); // 15
   return (testNum - 1 >= correct && correct > 0);
 
 }
