@@ -250,17 +250,45 @@ int test_MultiDigitNumbers() {
   int testNum = 1;
   int correct = 0;
   TreeParser tp;
-
+  stringstream buffer;
+  
   string expression = "(543+321)";
   tp.processExpression(expression);
-  tp.displayParseTree();
-  double answer = tp.computeAnswer();
-  checkTest(testNum++, correct, 864, answer); // 1
 
-  cout << "The result is: " << tp.computeAnswer() << endl;
+  std::streambuf* coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  std::string inOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "543 + 321 ", inOrderText); // 1
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  std::string postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "543 321 + ", postOrderText); // 2
+
+  double answer = tp.computeAnswer();
+  checkTest(testNum++, correct, 864, answer); // 3
+
   expression = "(7.5-3.25)";
   tp.processExpression(expression);
-  tp.displayParseTree();
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.inOrderTraversal();
+  inOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "7.5 - 3.25 ", inOrderText); // 4
+
+  coutbuf = cout.rdbuf(buffer.rdbuf());
+  tp.postOrderTraversal();
+  postOrderText = buffer.str();
+  buffer.str(std::string());
+  std::cout.rdbuf(coutbuf);
+  checkTest(testNum++, correct, "7.5 3.25 - ", postOrderText); // 5
+
   answer = tp.computeAnswer();
   checkTest(testNum++, correct, 4.25, answer); // 2
 
